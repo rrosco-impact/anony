@@ -1,5 +1,14 @@
 import express from "express";
+import multer from "multer";
+
 const router = express.Router();
+
+const memoryStorage = multer.memoryStorage()
+const upload = multer({ 
+  storage: memoryStorage,
+  limits: { fileSize: 10 * 1024 * 1024 }
+})
+
 // controllers
 import {
   createPost,
@@ -76,7 +85,7 @@ router.put("/posts/messages/:id", updateMessage);
 router.delete("/posts/messages/:id", deleteMessage);
 
 // proposal subtype
-router.post("/posts/:postId/proposal", createProposal);
+router.post("/posts/:postId/proposal", upload.single('proposal'), createProposal);
 router.get("/posts/proposals", getAllProposal);
 router.get("/posts/proposals/:id", getSpecificProposal);
 router.put("/posts/proposals/:id", updateProposal);
