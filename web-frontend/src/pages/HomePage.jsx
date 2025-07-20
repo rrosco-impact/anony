@@ -4,6 +4,8 @@ import axios from "axios";
 
 import icon from "../assets/icon-placeholder.svg";
 import NavBar from "../components/NavBar";
+import TopBar from "../components/TopBar";
+
 const TABS = [
   "For you",
   "question",
@@ -44,7 +46,9 @@ export default function HomePage() {
   return (
     <div className="h-full w-full flex flex-row">
       <NavBar active={"feed"}/>
-      <div className="p-6 max-w-3xl mx-auto space-y-6">
+      <div className="h-full w-full">
+        <TopBar/>
+      {/* <div className="p-6 max-w-3xl mx-auto space-y-6"> */}
         <h1 className="text-2xl font-bold capitalize">Activity Feed</h1>
         <div className="flex items-center mb-2 px-4">
           <div>

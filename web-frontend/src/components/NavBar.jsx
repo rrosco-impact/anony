@@ -92,7 +92,7 @@ export default function NavBar({ active }) {
     }
 
     return (
-        <div className="h-full w-[280px] p-[28px] border-r-[1.5px] border-border space-y-[56px]">
+        <div className="h-full w-[280px] p-[28px] border-r-[1.5px] border-border space-y-[56px] pointer-events-auto">
             <img src={Logo} className="w-[100px]"/>
 
             <div>

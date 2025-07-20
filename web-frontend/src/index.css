@@ -5,6 +5,8 @@
   --color-error: rgba(255,87,87);
   --color-secondary: rgba(37,37,37);
   --color-primary: rgba(5,132,254);
+  --color-onSurface: rgba(148,148,148);
+  --color-surface: rgba(246,246,246);
 }
 
 :root {
