@@ -11,7 +11,6 @@ import postRoutes from "./routes/post/postRoutes.js";
 dotenv.config(); // Load environment variables from .env file
 
 const app = express();
-app.use(express.json());
 const PORT = process.env.PORT || 3000;
 app.use(express.json()); // Parse JSON bodies
 app.use(cors()); //enable CORS for all routes

@@ -1,7 +1,6 @@
 import { sql } from "../../config/db.js";
 import { GoogleGenAI } from "@google/genai";
 import { Storage } from '@google-cloud/storage';
-import multer from "multer";
 
 const ai = new GoogleGenAI({});
 const storage = new Storage();

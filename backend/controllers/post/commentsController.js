@@ -1,7 +1,69 @@
 import { sql } from "../../config/db.js";
+import { GoogleGenAI } from "@google/genai";
 
-export const createComment = async (req, res) => {
-    const { user_id, post_id, team_id, content } = req.body
+const ai = new GoogleGenAI({});
+
+export const postComment = async (req, res) => {
+  const { user_id, post_id, reply_to, content } = req.body
+
+  const reply_to_post = 0;
+
+  const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: content,
+      config: {
+        systemInstruction: "You are a sentiment analysis model. Classify the content as [Positive, Neutral, Negative]",
+        temperature: 0.5,
+        candidateCount: 1,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: 1024
+      }
+  });
+
+  const sentiment_label = response.text;
+  const sentiment_score =  1;
+  const content_embedding = "Temporary embedding";
+  
+  console.log(`userID: ${user_id}`);
+  console.log(`postID: ${post_id}`);
+  console.log(`reply: ${reply_to_post}`);
+  console.log(`content: ${content}`);
+  console.log(`embedding: ${content_embedding}`);
+  console.log(`score: ${sentiment_score}`);
+  console.log(`label: ${sentiment_label}`);
+
+  if (
+    !user_id ||
+    !post_id ||
+    !content ||
+    !content_embedding ||
+    !sentiment_score ||
+    !sentiment_label
+  ) {
+    return res.status(400).json({
+      error:
+        "user_id, post_id, content, content_embedding, sentiment_score, and sentiment_label are required",
+    });
+  }
+
+  try {
+    const result = await sql`
+      INSERT INTO comments (user_id, post_id, reply_to, content, content_embedding, sentiment_score, sentiment_label)
+      VALUES (${user_id}, ${post_id}, ${reply_to_post}, ${content}, ${content_embedding}, ${sentiment_score}, ${sentiment_label})
+      RETURNING *;`;[
+      user_id, post_id, reply_to_post, content, content_embedding, sentiment_score, sentiment_label
+    ];    
+    res.status(201).json(result);
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const replyComment = async (req, res) => {
+    const { user_id, post_id, reply_to, content } = req.body
+
 
     const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
@@ -21,10 +83,10 @@ export const createComment = async (req, res) => {
     const sentiment_score = "Temporary sentiment score";
     const content_embedding = "Temporary embedding";
 
-    if (
+  if (
     !user_id ||
     !post_id ||
-    !team_id ||
+    !reply_to ||
     !content ||
     !content_embedding ||
     !sentiment_score ||
@@ -32,16 +94,16 @@ export const createComment = async (req, res) => {
   ) {
     return res.status(400).json({
       error:
-        "user_id, post_id, team_id, content, content_embedding, sentiment_score, and sentiment_label are required",
+        "user_id, post_id, content, content_embedding, sentiment_score, and sentiment_label are required",
     });
   }
 
   try {
     const result = await sql`
-      INSERT INTO comments (user_id, post_id, team_id, content, content_embedding, sentiment_score, sentiment_label)
-      VALUES (${user_id}, ${post_id}, ${team_id}, ${content}, ${content_embedding}, ${sentiment_score}, ${sentiment_label})
+      INSERT INTO comments (user_id, post_id, reply_to, content, content_embedding, sentiment_score, sentiment_label)
+      VALUES (${user_id}, ${post_id}, ${reply_to}, ${content}, ${content_embedding}, ${sentiment_score}, ${sentiment_label})
       RETURNING *;`;[
-      user_id, post_id, team_id, content, content_embedding, sentiment_score, sentiment_label
+      user_id, post_id, reply_to, content, content_embedding, sentiment_score, sentiment_label
     ];    
     res.status(201).json(result);
   } catch (error) {
@@ -49,4 +111,5 @@ export const createComment = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 export const getAllComments = async (req, res) => {};
