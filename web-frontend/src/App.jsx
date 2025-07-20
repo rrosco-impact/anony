@@ -10,7 +10,7 @@ import CreateSuggestion from "./pages/create/CreateSuggestion";
 function App() {
   return (
     <>
-      <div className="min-h-screen">
+      <div className="h-screen w-screen">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/create" element={<CreateSelector />} />

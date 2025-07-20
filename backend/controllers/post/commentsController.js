@@ -24,14 +24,6 @@ export const postComment = async (req, res) => {
   const sentiment_label = response.text;
   const sentiment_score =  1;
   const content_embedding = "Temporary embedding";
-  
-  console.log(`userID: ${user_id}`);
-  console.log(`postID: ${post_id}`);
-  console.log(`reply: ${reply_to_post}`);
-  console.log(`content: ${content}`);
-  console.log(`embedding: ${content_embedding}`);
-  console.log(`score: ${sentiment_score}`);
-  console.log(`label: ${sentiment_label}`);
 
   if (
     !user_id ||
@@ -61,15 +53,15 @@ export const postComment = async (req, res) => {
   }
 };
 
-export const replyComment = async (req, res) => {
-    const { user_id, post_id, reply_to, content } = req.body
 
+export const replyComment = async (req, res) => {
+  const { user_id, post_id, reply_to, content } = req.body;
 
     const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: content,
         config: {
-          systemInstruction: "You are a sentiment analysis model. Classify the content as [Positive, Neutral, Negative]",
+          systemInstruction: "You are a sentiment analysis model. Classify the content as [Positive, Neutral, Negative].",
           temperature: 0.5,
           candidateCount: 1,
           topK: 40,
@@ -80,7 +72,7 @@ export const replyComment = async (req, res) => {
 
     const sentiment_label = response.text
 
-    const sentiment_score = "Temporary sentiment score";
+    const sentiment_score = 1;
     const content_embedding = "Temporary embedding";
 
   if (
@@ -107,7 +99,7 @@ export const replyComment = async (req, res) => {
     ];    
     res.status(201).json(result);
   } catch (error) {
-    console.error("Error creating comment:", error);
+    console.error("Error creating reply to comment:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

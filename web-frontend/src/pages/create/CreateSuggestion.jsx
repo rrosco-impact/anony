@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import NavBar from "../../components/NavBar";
 
 export default function CreateSuggestion() {
   const [form, setForm] = useState({ content: "", summary: "" });
@@ -25,22 +26,25 @@ export default function CreateSuggestion() {
   };
 
   return (
-    <div className="p-6 space-y-4">
-      <h2 className="text-xl font-bold">Create a Suggestion</h2>
-      <input
-        type="text"
-        placeholder="Content"
-        value={form.content}
-        onChange={(e) => setForm({ ...form, content: e.target.value })}
-        className="w-full p-2 border rounded"
-      />
+    <div className="h-full w-full flex flex-row">
+      <NavBar active={"post"}/>
+      <div className="p-6 space-y-4">
+        <h2 className="text-xl font-bold">Create a Suggestion</h2>
+        <input
+          type="text"
+          placeholder="Content"
+          value={form.content}
+          onChange={(e) => setForm({ ...form, content: e.target.value })}
+          className="w-full p-2 border rounded"
+        />
 
-      <button
-        onClick={handleSubmit}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Submit
-      </button>
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Submit
+        </button>
+      </div>
     </div>
   );
 }
