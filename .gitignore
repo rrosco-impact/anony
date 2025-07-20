@@ -1,1 +1,2 @@
 .env
+node_modules/bcrypt/prebuilds/win32-x64/bcrypt.node
